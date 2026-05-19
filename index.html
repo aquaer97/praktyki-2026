@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCCom – Survivors</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #10101a;
+      --accent: #e63946;
+      --accent2: #ff6b35;
+      --text: #e0e0e0;
+      --muted: #555570;
+      --border: #1e1e2e;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Tło z siatką */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(230,57,70,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(230,57,70,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,15,0.9);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.6rem;
+      letter-spacing: 0.1em;
+      color: #fff;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+    }
+
+    .hero-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.05em;
+      color: #fff;
+      text-shadow: 0 0 60px rgba(230,57,70,0.3);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Sekcja gry */
+    .game-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .game-wrapper {
+      position: relative;
+      border: 1px solid var(--accent);
+      box-shadow:
+        0 0 0 1px rgba(230,57,70,0.1),
+        0 0 40px rgba(230,57,70,0.15),
+        inset 0 0 40px rgba(0,0,0,0.5);
+      background: #000;
+    }
+
+    .game-wrapper::before,
+    .game-wrapper::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-color: var(--accent);
+      border-style: solid;
+      z-index: 2;
+    }
+
+    .game-wrapper::before {
+      top: -1px; left: -1px;
+      border-width: 2px 0 0 2px;
+    }
+
+    .game-wrapper::after {
+      bottom: -1px; right: -1px;
+      border-width: 0 2px 2px 0;
+    }
+
+    .game-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 1rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .game-title-bar {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .game-title-bar span {
+      color: var(--accent);
+      margin-right: 0.5rem;
+    }
+
+    .btn-fullscreen {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-fullscreen:hover {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(230,57,70,0.4);
+    }
+
+    .btn-fullscreen svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+    }
+
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* Info pod grą */
+    .game-info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-top: 1px solid var(--border);
+    }
+
+    .info-item {
+      background: var(--surface);
+      padding: 1rem 1.2rem;
+      text-align: center;
+    }
+
+    .info-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .info-value {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+    }
+
+    /* Sterowanie */
+    .controls-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    .section-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .control-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .key {
+      background: var(--bg);
+      border: 1px solid var(--muted);
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.3rem 0.6rem;
+      min-width: 2rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .control-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    footer span { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">MC<span>Com</span></div>
+    <nav>
+      <a href="#">Start</a>
+      <a href="#">O nas</a>
+      <a href="#">Projekty</a>
+      <a href="#">Kontakt</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <p class="hero-label">// projekt gamingowy</p>
+    <h1>MCCom<br><em>Survivors</em></h1>
+    <p>Przeżyj jak najdłużej. Pokonaj fale przeciwników. Zostań legendą.</p>
+  </section>
+
+  <section class="game-section">
+    <div class="game-wrapper" id="gameWrapper">
+      <div class="game-topbar">
+        <div class="game-title-bar">
+          <span>▶</span> mccom_survivors.html
+        </div>
+        <button class="btn-fullscreen" onclick="toggleFullscreen()">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 3h6v2H5v4H3V3zm12 0h6v6h-2V5h-4V3zM3 15h2v4h4v2H3v-6zm16 4h-4v2h6v-6h-2v4z"/>
+          </svg>
+          Fullscreen
+        </button>
+      </div>
+
+      <div class="iframe-container" id="iframeContainer">
+        <iframe
+          id="gameFrame"
+          src="mccom_survivors.html"
+          allowfullscreen
+          allow="autoplay; fullscreen"
+        ></iframe>
+      </div>
+
+      <div class="game-info">
+        <div class="info-item">
+          <div class="info-label">Silnik</div>
+          <div class="info-value">Godot 4</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Gatunek</div>
+          <div class="info-value">Survival</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Platforma</div>
+          <div class="info-value">Web</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="controls-section">
+    <div class="section-title">Sterowanie</div>
+    <div class="controls-grid">
+      <div class="control-item">
+        <div class="key">WASD</div>
+        <div class="control-desc">Ruch postaci</div>
+      </div>
+      <div class="control-item">
+        <div class="key">ESC</div>
+        <div class="control-desc">Pauza</div>
+      </div>
+      <div class="control-item">
+        <div class="key">F</div>
+        <div class="control-desc">Pełny ekran</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 <span>MCCom</span> — Wszelkie prawa zastrzeżone
+  </footer>
+
+  <script>
+    function toggleFullscreen() {
+      const container = document.getElementById('iframeContainer');
+      if (!document.fullscreenElement) {
+        container.requestFullscreen().catch(err => {
+          alert('Błąd fullscreen: ' + err.message);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+
+</body>
+</html>
