@@ -162,22 +162,10 @@
     .game-topbar {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       padding: 0.6rem 1rem;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-    }
-
-    .game-title-bar {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .game-title-bar span {
-      color: var(--accent);
-      margin-right: 0.5rem;
     }
 
     .btn-fullscreen {
@@ -219,36 +207,6 @@
       height: 100%;
       border: none;
       display: block;
-    }
-
-    /* Info pod grą */
-    .game-info {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border-top: 1px solid var(--border);
-    }
-
-    .info-item {
-      background: var(--surface);
-      padding: 1rem 1.2rem;
-      text-align: center;
-    }
-
-    .info-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.3rem;
-    }
-
-    .info-value {
-      font-size: 0.85rem;
-      color: var(--accent);
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
     }
 
     /* Sterowanie */
@@ -312,6 +270,112 @@
       letter-spacing: 0.05em;
     }
 
+    .leaderboard {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .leaderboard-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .leaderboard-icon {
+      font-size: 0.9rem;
+    }
+
+    .leaderboard-body {
+      padding: 0.6rem 1rem;
+      font-size: 0.75rem;
+      color: var(--text);
+      min-height: 40px;
+    }
+
+    .lb-header {
+      display: flex;
+      align-items: center;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    .lb-header-rank { width: 30px; }
+    .lb-header-name { flex: 1; text-align: left; }
+    .lb-header-time { width: 50px; text-align: center; }
+    .lb-header-score { width: 60px; text-align: right; }
+
+    .lb-row {
+      display: flex;
+      align-items: center;
+      padding: 0.35rem 0.5rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .lb-row:hover {
+      background: rgba(255,255,255,0.04);
+    }
+
+    .lb-rank {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      width: 30px;
+      text-align: left;
+      color: var(--muted);
+    }
+
+    .lb-rank.gold { color: #ffd700; }
+    .lb-rank.silver { color: #c0c0c0; }
+    .lb-rank.bronze { color: #cd7f32; }
+
+    .lb-name {
+      flex: 1;
+      text-align: left;
+      padding-left: 0.3rem;
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .lb-time {
+      width: 50px;
+      text-align: center;
+      color: var(--muted);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    .lb-score {
+      width: 60px;
+      text-align: right;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: var(--accent2);
+      font-size: 0.85rem;
+    }
+
+    .lb-empty {
+      color: var(--muted);
+      font-style: italic;
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+
+    .lb-loading {
+      color: var(--muted);
+      text-align: center;
+    }
+
     footer {
       position: relative;
       z-index: 1;
@@ -347,9 +411,6 @@
   <section class="game-section">
     <div class="game-wrapper" id="gameWrapper">
       <div class="game-topbar">
-        <div class="game-title-bar">
-          <span>▶</span> mccom_survivors.html
-        </div>
         <button class="btn-fullscreen" onclick="toggleFullscreen()">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 3h6v2H5v4H3V3zm12 0h6v6h-2V5h-4V3zM3 15h2v4h4v2H3v-6zm16 4h-4v2h6v-6h-2v4z"/>
@@ -367,18 +428,12 @@
         ></iframe>
       </div>
 
-      <div class="game-info">
-        <div class="info-item">
-          <div class="info-label">Silnik</div>
-          <div class="info-value">Godot 4</div>
+      <div class="leaderboard" id="leaderboard">
+        <div class="leaderboard-header">
+          <span class="leaderboard-icon">🏆</span> LEADERBOARD
         </div>
-        <div class="info-item">
-          <div class="info-label">Gatunek</div>
-          <div class="info-value">Survival</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">Platforma</div>
-          <div class="info-value">Web</div>
+        <div class="leaderboard-body" id="leaderboardBody">
+          <div class="lb-loading">Loading...</div>
         </div>
       </div>
     </div>
@@ -388,7 +443,7 @@
     <div class="section-title">Sterowanie</div>
     <div class="controls-grid">
       <div class="control-item">
-        <div class="key">WASD</div>
+        <div class="key">WASD / ↑ ↓ → ←</div>
         <div class="control-desc">Ruch postaci</div>
       </div>
       <div class="control-item">
@@ -417,6 +472,50 @@
         document.exitFullscreen();
       }
     }
+
+    function renderLeaderboard() {
+      const body = document.getElementById('leaderboardBody');
+      try {
+        const raw = localStorage.getItem('mccom_leaderboard');
+        if (!raw || raw === '[]') {
+          body.innerHTML = '<div class="lb-empty">No scores yet. Play the game!</div>';
+          return;
+        }
+        const entries = JSON.parse(raw);
+        if (!entries.length) {
+          body.innerHTML = '<div class="lb-empty">No scores yet. Play the game!</div>';
+          return;
+        }
+        entries.sort((a, b) => b.score - a.score);
+        const top = entries.slice(0, 10);
+        let html = '';
+        const rankClass = ['gold', 'silver', 'bronze'];
+        html += '<div class="lb-header">'
+          + '<span class="lb-header-rank">#</span>'
+          + '<span class="lb-header-name">Player</span>'
+          + '<span class="lb-header-time">Time</span>'
+          + '<span class="lb-header-score">Score</span>'
+          + '</div>';
+        top.forEach((e, i) => {
+          const secs = Math.floor(e.time || 0);
+          const timeStr = String(Math.floor(secs / 60)).padStart(2, '0') + ':' + String(secs % 60).padStart(2, '0');
+          const name = e.name || 'Player';
+          const rc = rankClass[i] || '';
+          html += '<div class="lb-row">'
+            + '<span class="lb-rank ' + rc + '">#' + (i + 1) + '</span>'
+            + '<span class="lb-name">' + name + '</span>'
+            + '<span class="lb-time">' + timeStr + '</span>'
+            + '<span class="lb-score">' + e.score + '</span>'
+            + '</div>';
+        });
+        body.innerHTML = html;
+      } catch (e) {
+        body.innerHTML = '<div class="lb-empty">Could not load leaderboard.</div>';
+      }
+    }
+
+    renderLeaderboard();
+    window.addEventListener('storage', renderLeaderboard);
   </script>
 
 </body>
