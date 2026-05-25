@@ -109,24 +109,9 @@ body {
 			<div id="status-notice"></div>
 		</div>
 
-		<script>
-document.addEventListener('keydown', function(e) {
-	if (e.key === 'f' || e.key === 'F') {
-		e.preventDefault();
-		var c = document.getElementById('canvas');
-		if (c) {
-			if (!document.fullscreenElement) {
-				c.requestFullscreen().catch(function(err) {});
-			} else {
-				document.exitFullscreen();
-			}
-		}
-	}
-});
-		</script>
 		<script src="mccom_survivors.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"mccom_survivors","experimentalVK":false,"fileSizes":{"mccom_survivors.pck":5105060,"mccom_survivors.wasm":37695054},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"mccom_survivors","experimentalVK":false,"fileSizes":{"mccom_survivors.pck":5120996,"mccom_survivors.wasm":35749181},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
